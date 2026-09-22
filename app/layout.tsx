@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans, Playfair_Display, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { WeatherProvider } from "./components/weather-context";
+import WhatsAppCTA from "./components/whatsapp-cta";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -53,6 +54,7 @@ export default function RootLayout({
       <body className="min-h-full bg-[#050608] text-white selection:bg-[#E5A93C] selection:text-black overflow-x-hidden font-sans">
         <WeatherProvider>
           {children}
+          <WhatsAppCTA />
         </WeatherProvider>
       </body>
     </html>

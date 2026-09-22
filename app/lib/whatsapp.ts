@@ -101,6 +101,15 @@ export function buildCartWhatsAppUrl(
 }
 
 /**
+ * Builds a direct WhatsApp inquiry URL for general concierge assistance
+ */
+export function buildGeneralWhatsAppUrl(
+  customMessage = "Hello Ashren Concierge! I am browsing the Ashren Haute Marketplace and have an inquiry. Could you assist me?"
+): string {
+  return `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodeURIComponent(customMessage)}`;
+}
+
+/**
  * Opens WhatsApp in a new tab/window
  */
 export function openWhatsApp(url: string) {
@@ -108,3 +117,4 @@ export function openWhatsApp(url: string) {
     window.open(url, "_blank", "noopener,noreferrer");
   }
 }
+
