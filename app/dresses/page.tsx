@@ -24,6 +24,7 @@ import {
 import Header from "../components/header";
 import CartDrawer, { CartItem } from "../components/cart-drawer";
 import VideoModal from "../components/video-modal";
+import Footer from "../components/footer";
 import { DRESSES_DATA, Dress } from "../components/data";
 
 interface VirtualTryOnModalProps {
@@ -650,6 +651,9 @@ export default function DressesPage() {
           </div>
         )}
       </section>
+
+      {/* Luxury Footer with Giant Watermark */}
+      <Footer />
 
       {/* Virtual Try-On Modal */}
       <VirtualTryOnModal

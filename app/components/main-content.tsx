@@ -18,6 +18,7 @@ import {
   Radio,
 } from "lucide-react";
 import { PRODUCTS, Product } from "./data";
+import Footer from "./footer";
 
 interface MainContentProps {
   onShopNow: (product: Product) => void;
@@ -41,8 +42,9 @@ export default function MainContent({
   };
 
   return (
-    <div className="relative w-full z-10 space-y-24 sm:space-y-32 py-16 px-4 sm:px-8 lg:px-16 max-w-[1540px] mx-auto font-sans">
-      {/* 1. Flagship Trio Section */}
+    <>
+      <div className="relative w-full z-10 space-y-24 sm:space-y-32 py-16 px-4 sm:px-8 lg:px-16 max-w-[1540px] mx-auto font-sans">
+        {/* 1. Flagship Trio Section */}
       <section id="flagship-products" className="relative scroll-mt-20">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -565,21 +567,10 @@ export default function MainContent({
           </div>
         </div>
       </section>
+      </div>
 
-      {/* 6. Footer */}
-      <footer className="pt-8 border-t border-white/10 text-xs text-gray-400 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <span className="font-extrabold text-white tracking-widest text-sm">ASHREN</span>
-          <span className="text-[11px] text-gray-500">| Haute Marketplace</span>
-        </div>
-        <p>© 2026 Ashren Technologies Inc. All rights reserved.</p>
-        <div className="flex items-center gap-4 text-gray-400">
-          <a href="#" className="hover:text-white transition-colors">Privacy</a>
-          <a href="#" className="hover:text-white transition-colors">Terms</a>
-          <a href="#" className="hover:text-white transition-colors">Support</a>
-          <a href="#" className="hover:text-white transition-colors">Warranty</a>
-        </div>
-      </footer>
-    </div>
+      {/* 6. Full-Width Luxury Footer with Giant Watermark */}
+      <Footer />
+    </>
   );
 }
