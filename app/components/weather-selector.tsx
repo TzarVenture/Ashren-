@@ -213,7 +213,7 @@ export default function WeatherSelector({ className = "" }: WeatherSelectorProps
             </div>
 
             <p className="text-[9px] uppercase tracking-wider font-semibold text-gray-400 px-1 mb-1.5">
-              Switch Mobile Background Theme:
+              Switch Atmosphere & Background Theme:
             </p>
 
             <div className="space-y-1">

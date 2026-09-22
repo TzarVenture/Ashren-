@@ -98,41 +98,29 @@ export default function HomePage() {
 
       {/* 2. Fixed Background Landscape */}
       <div className="fixed inset-0 -z-30 pointer-events-none overflow-hidden">
-        {/* Desktop Fixed Background */}
-        <div className="hidden lg:block relative w-full h-full">
-          <Image
-            src="/background.png"
-            alt="Ashren Cinematic Landscape"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center scale-[1.01]"
-          />
-        </div>
+        {/* Dynamic Background Image with Smooth Cross-fade (PC & Mobile) */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={bgMobileImage}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <Image
+              src={bgMobileImage}
+              alt={`Ashren Cinematic Landscape - ${condition}`}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-top lg:object-center scale-[1.01]"
+            />
+          </motion.div>
+        </AnimatePresence>
 
-        {/* Mobile Fixed Background with Dynamic Weather & Weather Overlays */}
-        <div className="block lg:hidden relative w-full h-full">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={bgMobileImage}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.6 }}
-              className="absolute inset-0 w-full h-full"
-            >
-              <Image
-                src={bgMobileImage}
-                alt={`Ashren Mobile Cinematic Landscape - ${condition}`}
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover object-top scale-[1.01]"
-              />
-            </motion.div>
-          </AnimatePresence>
-          <WeatherOverlay condition={condition} />
-        </div>
+        {/* Dynamic Weather Particle & Atmosphere Overlay (PC & Mobile) */}
+        <WeatherOverlay condition={condition} />
 
         {/* Gradient Shadow Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none" />

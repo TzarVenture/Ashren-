@@ -43,6 +43,7 @@ interface WeatherContextType {
   isOverride: boolean;
   manualOverride: WeatherThemeKey | null;
   bgMobileImage: string;
+  bgImage: string;
   googleWeatherUrl: string;
   setManualTheme: (theme: WeatherThemeKey | null) => void;
   refreshWeather: () => Promise<void>;
@@ -185,6 +186,7 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
         isOverride: manualOverride !== null,
         manualOverride,
         bgMobileImage,
+        bgImage: bgMobileImage,
         googleWeatherUrl,
         setManualTheme: setManualOverride,
         refreshWeather,
