@@ -17,6 +17,20 @@ import {
   BatteryCharging,
 } from "lucide-react";
 import { PRODUCTS, Product } from "./data";
+import { buildProductWhatsAppUrl, openWhatsApp } from "../lib/whatsapp";
+
+function WhatsAppIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2ZM12.05 20.16C10.57 20.16 9.12 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.8 13.47 3.8 11.91C3.8 7.37 7.5 3.67 12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.16 12.05 20.16ZM16.57 14.39C16.32 14.26 15.11 13.67 14.88 13.58C14.66 13.5 14.5 13.46 14.33 13.71C14.17 13.96 13.71 14.5 13.57 14.66C13.43 14.83 13.29 14.85 13.04 14.72C12.79 14.6 11.99 14.34 11.04 13.49C10.3 12.83 9.8 12.02 9.66 11.77C9.52 11.52 9.64 11.39 9.77 11.26C9.88 11.15 10.02 10.97 10.14 10.83C10.27 10.69 10.31 10.58 10.39 10.42C10.47 10.25 10.43 10.11 10.37 9.98C10.31 9.86 9.81 8.64 9.61 8.13C9.4 7.64 9.2 7.7 9.05 7.69L8.57 7.68C8.41 7.68 8.14 7.74 7.91 7.99C7.69 8.24 7.05 8.84 7.05 10.06C7.05 11.28 7.94 12.45 8.06 12.62C8.19 12.78 9.81 15.28 12.28 16.35C12.87 16.6 13.33 16.76 13.69 16.87C14.28 17.06 14.82 17.03 15.25 16.97C15.73 16.9 16.72 16.37 16.93 15.79C17.13 15.2 17.13 14.7 17.07 14.6C17.01 14.49 16.82 14.42 16.57 14.39Z" />
+    </svg>
+  );
+}
 
 interface HeroDesktopProps {
   onShopNow: (product: Product) => void;
@@ -116,29 +130,46 @@ export default function HeroDesktop({ onShopNow, onOpenVideo, isLoaded = true }:
             </motion.div>
           </AnimatePresence>
 
-          {/* Buttons: Shop Now & Watch Video */}
+          {/* Buttons: Buy Now (WhatsApp), Add to Bag & Watch Video */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.7, delay: 0.4 }}
-            className="flex flex-wrap items-center gap-4 mb-8"
+            className="flex flex-wrap items-center gap-3.5 mb-8"
           >
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                const url = buildProductWhatsAppUrl({
+                  title: product.name,
+                  price: product.price,
+                  category: product.category,
+                  quantity: 1,
+                });
+                openWhatsApp(url);
+              }}
+              className="relative group px-6 py-3.5 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-black font-extrabold text-sm tracking-wide flex items-center gap-2 shadow-[0_0_25px_rgba(37,211,102,0.4)] transition-all"
+            >
+              <WhatsAppIcon className="w-4 h-4 fill-black" />
+              <span>Buy Now • ₹{product.price.toLocaleString("en-IN")}</span>
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => onShopNow(product)}
-              className="relative group px-7 py-3.5 rounded-full bg-gold-gradient hover:bg-gold-gradient-hover text-black font-extrabold text-sm tracking-wide flex items-center gap-2.5 shadow-[0_0_30px_rgba(234,168,56,0.5)] transition-all"
+              className="relative group px-6 py-3.5 rounded-full bg-gold-gradient hover:bg-gold-gradient-hover text-black font-extrabold text-sm tracking-wide flex items-center gap-2 shadow-[0_0_25px_rgba(234,168,56,0.35)] transition-all"
             >
               <ShoppingBag className="w-4 h-4 text-black group-hover:rotate-12 transition-transform" />
-              <span>Shop Now (₹{product.price.toLocaleString("en-IN")})</span>
-              <span className="text-base group-hover:translate-x-1 transition-transform">➔</span>
+              <span>Add to Bag</span>
             </motion.button>
 
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => onOpenVideo(`${product.name} Cinematic 4K Showcase`, product.category)}
-              className="px-6 py-3.5 rounded-full bg-black/40 hover:bg-white/10 border border-white/20 hover:border-white/40 text-white font-medium text-sm flex items-center gap-2.5 backdrop-blur-md transition-all group"
+              className="px-5 py-3.5 rounded-full bg-black/40 hover:bg-white/10 border border-white/20 hover:border-white/40 text-white font-medium text-sm flex items-center gap-2 backdrop-blur-md transition-all group"
             >
               <div className="w-5 h-5 rounded-full bg-white/15 flex items-center justify-center group-hover:bg-[#EAA838] group-hover:text-black transition-colors">
                 <Play className="w-2.5 h-2.5 fill-current ml-0.5" />

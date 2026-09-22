@@ -19,6 +19,20 @@ import {
 } from "lucide-react";
 import { PRODUCTS, Product } from "./data";
 import Footer from "./footer";
+import { buildProductWhatsAppUrl, openWhatsApp } from "../lib/whatsapp";
+
+function WhatsAppIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2ZM12.05 20.16C10.57 20.16 9.12 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.8 13.47 3.8 11.91C3.8 7.37 7.5 3.67 12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.16 12.05 20.16ZM16.57 14.39C16.32 14.26 15.11 13.67 14.88 13.58C14.66 13.5 14.5 13.46 14.33 13.71C14.17 13.96 13.71 14.5 13.57 14.66C13.43 14.83 13.29 14.85 13.04 14.72C12.79 14.6 11.99 14.34 11.04 13.49C10.3 12.83 9.8 12.02 9.66 11.77C9.52 11.52 9.64 11.39 9.77 11.26C9.88 11.15 10.02 10.97 10.14 10.83C10.27 10.69 10.31 10.58 10.39 10.42C10.47 10.25 10.43 10.11 10.37 9.98C10.31 9.86 9.81 8.64 9.61 8.13C9.4 7.64 9.2 7.7 9.05 7.69L8.57 7.68C8.41 7.68 8.14 7.74 7.91 7.99C7.69 8.24 7.05 8.84 7.05 10.06C7.05 11.28 7.94 12.45 8.06 12.62C8.19 12.78 9.81 15.28 12.28 16.35C12.87 16.6 13.33 16.76 13.69 16.87C14.28 17.06 14.82 17.03 15.25 16.97C15.73 16.9 16.72 16.37 16.93 15.79C17.13 15.2 17.13 14.7 17.07 14.6C17.01 14.49 16.82 14.42 16.57 14.39Z" />
+    </svg>
+  );
+}
 
 interface MainContentProps {
   onShopNow: (product: Product) => void;
@@ -145,13 +159,30 @@ export default function MainContent({
 
               {/* Action Buttons */}
               <div className="space-y-1.5 sm:space-y-2 pt-2 border-t border-white/10">
-                <button
-                  onClick={() => onShopNow(prod)}
-                  className="w-full py-2 sm:py-2.5 rounded-xl bg-gold-gradient hover:bg-gold-gradient-hover text-black font-extrabold text-xs sm:text-sm tracking-wide shadow-[0_4px_20px_rgba(234,168,56,0.35)] flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black" />
-                  <span>Add to Cart</span>
-                </button>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => {
+                      const url = buildProductWhatsAppUrl({
+                        title: prod.name,
+                        price: prod.price,
+                        category: prod.category,
+                        quantity: 1,
+                      });
+                      openWhatsApp(url);
+                    }}
+                    className="w-full py-2 sm:py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-black font-extrabold text-xs sm:text-sm tracking-wide shadow-[0_4px_15px_rgba(37,211,102,0.35)] flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    <WhatsAppIcon className="w-3.5 h-3.5 fill-black" />
+                    <span>Buy Now</span>
+                  </button>
+                  <button
+                    onClick={() => onShopNow(prod)}
+                    className="w-full py-2 sm:py-2.5 rounded-xl bg-gold-gradient hover:bg-gold-gradient-hover text-black font-extrabold text-xs sm:text-sm tracking-wide shadow-[0_4px_20px_rgba(234,168,56,0.35)] flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    <ShoppingBag className="w-3.5 h-3.5 text-black" />
+                    <span>Add to Bag</span>
+                  </button>
+                </div>
                 <button
                   onClick={() => onOpenVideo(`${prod.name} 4K Master Showcase`, prod.category)}
                   className="w-full py-1.5 sm:py-2 rounded-xl bg-white/[0.05] hover:bg-white/15 text-gray-200 hover:text-white border border-white/10 text-[10px] sm:text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
@@ -475,28 +506,79 @@ export default function MainContent({
                 <tr>
                   <td className="py-4 px-4" />
                   <td className="py-4 px-4 text-center">
-                    <button
-                      onClick={() => onShopNow(PRODUCTS[0])}
-                      className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-[#EAA838] hover:text-black font-semibold text-xs transition-colors"
-                    >
-                      Shop Camera
-                    </button>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5">
+                      <button
+                        onClick={() => {
+                          const url = buildProductWhatsAppUrl({
+                            title: PRODUCTS[0].name,
+                            price: PRODUCTS[0].price,
+                            category: PRODUCTS[0].category,
+                            quantity: 1,
+                          });
+                          openWhatsApp(url);
+                        }}
+                        className="px-2.5 py-1.5 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-black font-bold text-[11px] flex items-center gap-1 shadow-sm transition-all"
+                      >
+                        <WhatsAppIcon className="w-3 h-3 fill-black" />
+                        <span>Buy Now</span>
+                      </button>
+                      <button
+                        onClick={() => onShopNow(PRODUCTS[0])}
+                        className="px-2.5 py-1.5 rounded-full bg-white/10 hover:bg-[#EAA838] hover:text-black font-semibold text-[11px] transition-colors"
+                      >
+                        Add to Bag
+                      </button>
+                    </div>
                   </td>
                   <td className="py-4 px-4 text-center">
-                    <button
-                      onClick={() => onShopNow(PRODUCTS[1])}
-                      className="px-3 py-1.5 rounded-full bg-[#EAA838] text-black font-semibold text-xs shadow-md transition-colors"
-                    >
-                      Shop Drone
-                    </button>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5">
+                      <button
+                        onClick={() => {
+                          const url = buildProductWhatsAppUrl({
+                            title: PRODUCTS[1].name,
+                            price: PRODUCTS[1].price,
+                            category: PRODUCTS[1].category,
+                            quantity: 1,
+                          });
+                          openWhatsApp(url);
+                        }}
+                        className="px-2.5 py-1.5 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-black font-bold text-[11px] flex items-center gap-1 shadow-sm transition-all"
+                      >
+                        <WhatsAppIcon className="w-3 h-3 fill-black" />
+                        <span>Buy Now</span>
+                      </button>
+                      <button
+                        onClick={() => onShopNow(PRODUCTS[1])}
+                        className="px-2.5 py-1.5 rounded-full bg-[#EAA838] text-black font-semibold text-[11px] shadow-md transition-colors"
+                      >
+                        Add to Bag
+                      </button>
+                    </div>
                   </td>
                   <td className="py-4 px-4 text-center">
-                    <button
-                      onClick={() => onShopNow(PRODUCTS[2])}
-                      className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-[#EAA838] hover:text-black font-semibold text-xs transition-colors"
-                    >
-                      Shop Action Cam
-                    </button>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5">
+                      <button
+                        onClick={() => {
+                          const url = buildProductWhatsAppUrl({
+                            title: PRODUCTS[2].name,
+                            price: PRODUCTS[2].price,
+                            category: PRODUCTS[2].category,
+                            quantity: 1,
+                          });
+                          openWhatsApp(url);
+                        }}
+                        className="px-2.5 py-1.5 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-black font-bold text-[11px] flex items-center gap-1 shadow-sm transition-all"
+                      >
+                        <WhatsAppIcon className="w-3 h-3 fill-black" />
+                        <span>Buy Now</span>
+                      </button>
+                      <button
+                        onClick={() => onShopNow(PRODUCTS[2])}
+                        className="px-2.5 py-1.5 rounded-full bg-white/10 hover:bg-[#EAA838] hover:text-black font-semibold text-[11px] transition-colors"
+                      >
+                        Add to Bag
+                      </button>
+                    </div>
                   </td>
                 </tr>
               </tbody>

@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Trash2, Plus, Minus, ShieldCheck, ShoppingBag, ArrowRight } from "lucide-react";
+import { buildCartWhatsAppUrl, openWhatsApp } from "../lib/whatsapp";
 
 export interface CartItem {
   id: string;
@@ -162,11 +163,18 @@ export default function CartDrawer({
                   <span>100% Encrypted & Safe Checkout</span>
                 </div>
                 <button
-                  onClick={() => alert("Proceeding to secure payment gateway...")}
+                  onClick={() => {
+                    const url = buildCartWhatsAppUrl(cartItems, subtotal, total);
+                    openWhatsApp(url);
+                  }}
                   className="w-full py-3 rounded-xl bg-gold-gradient text-black font-bold text-sm shadow-[0_0_20px_rgba(234,168,56,0.4)] hover:bg-gold-gradient-hover flex items-center justify-center gap-2 transition-all group"
                 >
-                  <span>Proceed to Checkout</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.634.053-1.077-.074-.537-.154-1.226-.457-2.096-1.326-.87-.87-1.173-1.559-1.327-2.096-.127-.443-.119-.765-.074-1.077.05-.333.419-1.026.824-1.17.14-.05.289-.074.428-.074.139 0 .288.024.428.074.167.06.273.187.336.312.167.333.568 1.385.618 1.488.05.104.084.225.014.364-.07.139-.105.225-.21.348-.104.124-.219.277-.313.372-.104.104-.212.218-.091.425.121.208.539.889 1.157 1.44.795.708 1.464.928 1.672 1.032.208.104.33.087.452-.052.122-.139.521-.607.66-.815.139-.208.278-.174.468-.104.19.07 1.206.568 1.414.673.208.104.347.156.399.243.052.087.052.503-.092.908z" />
+                    <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.526 3.66 1.438 5.178L2 22l4.98-1.39A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.2c-1.63 0-3.14-.49-4.41-1.33l-.32-.21-2.96.83.83-2.88-.23-.36A8.176 8.176 0 013.8 12c0-4.52 3.68-8.2 8.2-8.2s8.2 3.68 8.2 8.2-3.68 8.2-8.2 8.2z" />
+                  </svg>
+                  <span>Checkout on WhatsApp</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform shrink-0" />
                 </button>
               </div>
             )}
